@@ -19,7 +19,7 @@
 <body>
 
 <div id="contenedora" style="float:none; margin: 0 auto;width: 900px;" >
-	<form action="/tienda_informatica/fabricantes/editar/" method="post" >
+	<form action="fabricantes/editar/" method="post" >
 		<input type="hidden" name="__method__" value="put" />
 		<div class="clearfix">
 			<div style="float: left; width: 50%">

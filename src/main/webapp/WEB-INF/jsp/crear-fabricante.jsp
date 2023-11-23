@@ -19,7 +19,7 @@
 <body>
 
 <div id="contenedora" style="float:none; margin: 0 auto;width: 900px;" >
-	<form action="/tienda_informatica/fabricantes/crear/" method="post">
+	<form action="fabricantescrear/" method="post">
 		<div class="clearfix">
 			<div style="float: left; width: 50%">
 				<h1>Crear Fabricante</h1>

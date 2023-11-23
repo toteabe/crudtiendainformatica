@@ -27,7 +27,7 @@
 				
 				<div style="position: absolute; left: 39%; top : 39%;">
 					
-						<form action="/tienda_informatica/fabricantes" >
+						<form action="../fabricantes" >
 							<input type="submit" value="Volver" />
 						</form>
 					</div>

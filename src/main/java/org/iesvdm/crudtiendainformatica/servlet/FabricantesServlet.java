@@ -4,25 +4,39 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.annotation.*;
 
 import org.iesvdm.crudtiendainformatica.dao.FabricanteDAO;
 import org.iesvdm.crudtiendainformatica.dao.FabricanteDAOImpl;
 import org.iesvdm.crudtiendainformatica.model.Fabricante;
 
 
-//@WebServlet(name = "FabricanteServlet", value = "/fabricantes/*")
+//DECLARACIÓN DEL SERVLET Y DE LOS PATHS QUE SERÁN TRATADAS POR ÉL
+//		nombre del servlet--v         path/s -----------v => con el * se indica cualquier subruta
+
+//@WebServlet(name = "fabricanteServlet", value = "fabricantes*")
+@WebServlet(name = "fabricanteServlet", value = {"/fabricantes/*","/fabs/*"})
 public class FabricantesServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	private String contextPath;
+
+	@Override
+	public void init() {
+		this.contextPath = getServletContext().getContextPath();
+		System.out.println("Context Path =" + this.contextPath);
+	}
+
 	/**
 	 * HTTP Method: GET
 	 * Paths: 
-	 * 		/fabricantes/
+	 * 		/fabricantes
 	 * 		/fabricantes/{id}
 	 * 		/fabricantes/edit/{id}
 	 * 		/fabricantes/create
@@ -30,17 +44,18 @@ public class FabricantesServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
+
 		RequestDispatcher dispatcher;
-				
+		String contextPath = request.getContextPath();
 		String pathInfo = request.getPathInfo(); //
 			
 		if (pathInfo == null || "/".equals(pathInfo)) {
 			FabricanteDAO fabDAO = new FabricanteDAOImpl();
 			
 			//GET 
-			//	/fabricantes/
 			//	/fabricantes
+			//	/fabricantes/
 			
 			request.setAttribute("listaFabricantes", fabDAO.getAll());		
 			dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/fabricantes.jsp");
@@ -60,14 +75,14 @@ public class FabricantesServlet extends HttpServlet {
 			if (pathParts.length == 2 && "crear".equals(pathParts[1])) {
 				
 				// GET
-				// /fabricantes/create									
+				// fabricantescreate
 				dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/crear-fabricante.jsp");
         												
 			
 			} else if (pathParts.length == 2) {
 				FabricanteDAO fabDAO = new FabricanteDAOImpl();
 				// GET
-				// /fabricantes/{id}
+				// fabricantes{id}
 				try {
 					request.setAttribute("fabricante",fabDAO.find(Integer.parseInt(pathParts[1])));
 					dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/detalle-fabricante.jsp");
@@ -131,17 +146,15 @@ public class FabricantesServlet extends HttpServlet {
 			// Actualizar uno existente
 			//Dado que los forms de html sólo soportan method GET y POST utilizo parámetro oculto para indicar la operación de actulización DELETE.
 			doDelete(request, response);
-			
-			
-			
+
 		} else {
 			
 			System.out.println("Opción POST no soportada.");
 			
 		}
 		
-		response.sendRedirect("/tienda_informatica/fabricantes");
-		//response.sendRedirect("/tienda_informatica/fabricantes");
+		response.sendRedirect(this.contextPath + "/fabricantes");
+		//response.sendRedirect("/fabricantes");
 		
 		
 	}
